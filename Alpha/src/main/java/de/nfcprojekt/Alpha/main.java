@@ -16,6 +16,6 @@ public class main extends Activity {
         webSettings.setJavaScriptEnabled(true);
         myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
         myWebView.setWebViewClient(new WebViewClient());
-        myWebView.loadUrl("http://kernproblem.square7.ch/nfc/");
+        myWebView.loadUrl("http://nfc.net16.net/");
     }
 }
