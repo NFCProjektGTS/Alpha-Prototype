@@ -11,5 +11,11 @@ public class main extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        WebView myWebView = (WebView) findViewById(R.id.webview);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
+        myWebView.setWebViewClient(new WebViewClient());
+        myWebView.loadUrl("http://kernproblem.square7.ch/nfc/");
     }
 }
