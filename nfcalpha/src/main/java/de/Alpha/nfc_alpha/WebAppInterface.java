@@ -1,14 +1,13 @@
-package de.nfcprojekt.nfcalpha.alpha;
+package de.Alpha.nfc_alpha;
 
 import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 /**
- * Created by Kern on 26.05.2014.
+ * Created by Kern on 27.05.2014.
  */
 public class WebAppInterface {
-
     Context mContext;
 
     /** Instantiate the interface and set the context */
@@ -21,5 +20,4 @@ public class WebAppInterface {
     public void showToast(String toast) {
         Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
     }
-
 }
