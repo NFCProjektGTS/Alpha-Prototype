@@ -3,7 +3,6 @@ package de.Alpha.nfc_alpha;
 import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 /**
  * Created by Kern on 27.05.2014.
@@ -20,13 +19,15 @@ public class WebAppInterface {
     /** Show a toast from the web page */
     @JavascriptInterface
     public void showToast(String toast) {
+        NFCFramework framework = new NFCFramework(mContext, this);
+        /*
         Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
-        run("test();");
+        */
     }
 
     @JavascriptInterface
     public void initNFC() {
-
+        //placeholder
     }
 
     //run("<JavascriptMethod()>;"); zum auführen einer Javascript Methode
@@ -38,6 +39,10 @@ public class WebAppInterface {
                 wv.loadUrl("javascript:"+script);
             }
         });
+    }
+
+    public void printdebug(String s) {
+        run("debug('" + s + "');");
     }
 
 

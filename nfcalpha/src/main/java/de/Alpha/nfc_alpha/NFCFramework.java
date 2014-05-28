@@ -13,19 +13,18 @@ public class NFCFramework {
     protected boolean WriteMode;
 
 
-    NFCFramework(Context caller) {
-        try {
-            System.out.println("Initialzing NFC Framework");
-            mNfcAdapter = NfcAdapter.getDefaultAdapter(caller);
-            if (mNfcAdapter != null) {
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    NFCFramework(Context caller, WebAppInterface wai) {
+        wai.printdebug("Initialzing NFC Framework");
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(caller);
+        if (mNfcAdapter != null) {
+            wai.printdebug("Success!: " + mNfcAdapter.toString());
+        } else {
+            wai.printdebug("Error: NFC Hardware not detected");
         }
 
-
     }
+
+
 
 
 }
