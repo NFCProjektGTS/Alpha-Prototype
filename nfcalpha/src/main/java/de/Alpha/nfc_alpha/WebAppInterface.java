@@ -21,7 +21,7 @@ public class WebAppInterface {
     @JavascriptInterface
     public void showToast(String toast) {
         Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
-         run("test();");
+        run("test();");
     }
 
     @JavascriptInterface
