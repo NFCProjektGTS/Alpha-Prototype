@@ -11,6 +11,11 @@ import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
     static private WebView wv;
+
+    public static WebView getWV() {
+        return wv;
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
