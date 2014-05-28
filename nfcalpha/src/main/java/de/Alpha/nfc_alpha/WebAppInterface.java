@@ -24,6 +24,11 @@ public class WebAppInterface {
         run("test();");
     }
 
+    @JavascriptInterface
+    public void initNFC() {
+
+    }
+
     //run("<JavascriptMethod()>;"); zum auführen einer Javascript Methode
 
     public void run(final String script) {
