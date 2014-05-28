@@ -2,6 +2,7 @@ package de.Alpha.nfc_alpha;
 
 import android.content.Context;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 /**
@@ -9,6 +10,7 @@ import android.widget.Toast;
  */
 public class WebAppInterface {
     Context mContext;
+     WebView wv = MainActivity.getWV();
 
     /** Instantiate the interface and set the context */
     WebAppInterface(Context c) {
@@ -19,5 +21,19 @@ public class WebAppInterface {
     @JavascriptInterface
     public void showToast(String toast) {
         Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        run("test();");
     }
+
+    //run("<JavascriptMethod()>;"); zum auführen einer Javascript Methode
+
+    public void run(final String script) {
+        wv.post(new Runnable() {
+            @Override
+            public void run() {
+                wv.loadUrl("javascript:"+script);
+            }
+        });
+    }
+
+
 }
