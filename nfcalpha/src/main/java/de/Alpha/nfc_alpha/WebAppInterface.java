@@ -28,14 +28,16 @@ public class WebAppInterface {
     }
     @JavascriptInterface
     public void activateNFC() {
-
-        //final Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        printdebug("NFC Einstllungen geöffnet zum aktivieren");
+        final Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        mContext.startActivity(intent);
         //new MainActivity().openSettings(intent);
     }
     @JavascriptInterface
     public final void closeApp(){
-        System.out.println("App geschlossen, da kein NFC aktiviert wird.");
+        printdebug("App geschlossen, da kein NFC aktiviert wird.");
+        //TODO App schließen hier rein
     }
 
     @JavascriptInterface

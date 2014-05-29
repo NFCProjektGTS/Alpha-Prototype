@@ -18,6 +18,13 @@ public class NFCFramework {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(caller);
         if (mNfcAdapter != null) {
             wai.printdebug("Success!: " + mNfcAdapter.toString());
+            if (mNfcAdapter.isEnabled()){
+                wai.printdebug("NFC is enabled!");
+            }else {
+                wai.printdebug("NFC is disabled");
+                wai.printdebug("opening NFC activation Dialog");
+                wai.run("NFCDialog();");
+            }
         } else {
             wai.printdebug("Error: NFC Hardware not detected");
         }
