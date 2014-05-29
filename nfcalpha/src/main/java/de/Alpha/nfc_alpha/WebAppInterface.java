@@ -3,7 +3,6 @@ package de.Alpha.nfc_alpha;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -37,6 +36,8 @@ public class WebAppInterface {
     @JavascriptInterface
     public final void closeApp(){
         printDebugWarning("App geschlossen, da kein NFC aktiviert wird.");
+        wv.destroy();
+
 
         //TODO App schließen hier rein    geht nicht???-> new MainActivity().finish();
     }
