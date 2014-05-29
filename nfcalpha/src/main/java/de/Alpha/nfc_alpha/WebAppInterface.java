@@ -1,6 +1,9 @@
 package de.Alpha.nfc_alpha;
 
 import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -11,18 +14,28 @@ public class WebAppInterface {
     Context mContext;
      WebView wv = MainActivity.getWV();
 
-    /** Instantiate the interface and set the context */
+
     WebAppInterface(Context c) {
         mContext = c;
     }
 
-    /** Show a toast from the web page */
     @JavascriptInterface
     public void showToast(String toast) {
         NFCFramework framework = new NFCFramework(mContext, this);
         /*
         Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
         */
+    }
+    @JavascriptInterface
+    public void activateNFC() {
+
+        //final Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        //new MainActivity().openSettings(intent);
+    }
+    @JavascriptInterface
+    public final void closeApp(){
+        System.out.println("App geschlossen, da kein NFC aktiviert wird.");
     }
 
     @JavascriptInterface

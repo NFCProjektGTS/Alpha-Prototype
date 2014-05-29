@@ -63,4 +63,13 @@ public class MainActivity extends Activity {
         wv.loadUrl("http://nfc.net16.net/");
 
     }
+    @Override
+    public void finish() {
+        super.finish();
+    }
+    void openSettings(Intent intent){
+        //startActivity(intent);
+    }
+
+
 }
