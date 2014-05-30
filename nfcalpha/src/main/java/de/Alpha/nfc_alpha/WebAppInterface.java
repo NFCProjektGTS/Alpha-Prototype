@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 /**
  * Created by Kern on 27.05.2014.
@@ -20,10 +21,12 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void showToast(String toast) {
+        System.out.println("Test1");
         NFCFramework framework = new NFCFramework(mContext, this);
-        /*
+
+
         Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
-        */
+
     }
     @JavascriptInterface
     public void activateNFC() {
@@ -45,6 +48,7 @@ public class WebAppInterface {
     @JavascriptInterface
     public void initNFC() {
         //placeholder
+        System.out.println("Test1");
     }
 
     //run("<JavascriptMethod()>;"); zum auführen einer Javascript Methode
