@@ -24,7 +24,6 @@ public class NFCFramework {
     NFCFramework(Context caller, WebAppInterface wai) {
         this.wai = wai;
         wai.printDebugInfo("Initialzing NFC Framework");
-        System.out.println("Test2");
         this.mNfcAdapter = NfcAdapter.getDefaultAdapter(caller);
         this.enabled = checkNFC();
 
@@ -40,17 +39,18 @@ public class NFCFramework {
 
     public boolean checkNFC() {
         if (mNfcAdapter != null) {
-            wai.printDebugInfo("Success!: " + mNfcAdapter.toString());
+            wai.printDebugInfo("Adapter found: " + mNfcAdapter.toString());
 
             if (!mNfcAdapter.isEnabled()) {
                 wai.printDebugInfo("NFC is disabled");
-                wai.printDebugInfo("opening NFC activation Dialog");
+                wai.printDebugInfo("Opening NFC Activation Dialog");
                 wai.run("NFCDialog();");
                 if (mNfcAdapter.isEnabled()) {
                     return true;
                 }
             }
         } else {
+            wai.showNotification("NFC Hardware nicht gefunden","Bitte stellen sie sicher das ihr Gerät NFC unterstützt.");
             wai.printDebugError("NFC Hardware not detected");
         }
         return false;

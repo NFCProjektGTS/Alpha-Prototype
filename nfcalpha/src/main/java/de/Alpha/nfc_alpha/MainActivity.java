@@ -12,7 +12,7 @@ public class MainActivity extends Activity {
     static private WebView wv;
     protected PendingIntent mNfcPendingIntent;
     private WebAppInterface wai;
-    private NFCFramework framework;
+    public NFCFramework framework;
 
     public static WebView getWV() {
         return wv;
@@ -71,16 +71,18 @@ public class MainActivity extends Activity {
         wv = (WebView) findViewById(R.id.webview);
         wai = new WebAppInterface(this);
         wv.addJavascriptInterface(wai, "Android");
-        wv.setWebViewClient(new WebViewClient());
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        //wv.loadUrl("http://nfc.net16.net/");
+        wv.setWebViewClient(new WebViewClient() {});
+
         wv.loadUrl("http://nfc.net16.net/");
+        //>> WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
+        //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN
+        //>>                       WebAppInterface.firstload()
+        //framework = new NFCFramework(this, wai);
 
-        framework = new NFCFramework(this, wai);
     }
-
-
-
 
 
     @Override
