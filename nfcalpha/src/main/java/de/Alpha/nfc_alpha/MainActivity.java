@@ -96,8 +96,8 @@ public class MainActivity extends Activity {
         while (wv.getProgress() != 100) {
         }
         framework = new NFCFramework(this, wai);
-        framework.getmNfcAdapter().enableForegroundDispatch(this, mNfcPendingIntent, null, null);
-        //>> WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
+
+        // WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
         //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN
         //>>                       WebAppInterface.firstload()
         //framework = new NFCFramework(this, wai);
