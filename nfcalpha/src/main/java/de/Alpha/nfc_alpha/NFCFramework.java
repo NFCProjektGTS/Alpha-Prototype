@@ -58,9 +58,11 @@ public class NFCFramework {
                 if (mNfcAdapter.isEnabled()) {
                     return true;
                 }
+            } else {
+                return true;
             }
         } else {
-            wai.showNotification("NFC Hardware nicht gefunden","Bitte stellen sie sicher das ihr Gerät NFC unterstützt.");
+            wai.showNotification("NFC Hardware nicht gefunden", "Bitte stellen sie sicher das ihr Gerät NFC unterstützt.");
             //wai.printDebugError("NFC Hardware not detected");
         }
         return false;
