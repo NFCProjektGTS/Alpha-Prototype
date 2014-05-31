@@ -3,6 +3,7 @@ package de.Alpha.nfc_alpha;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -10,12 +11,21 @@ import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
     static private WebView wv;
+    public NFCFramework framework;
     protected PendingIntent mNfcPendingIntent;
     private WebAppInterface wai;
-    public NFCFramework framework;
+    private IntentFilter[] mWriteTagFilters;
 
     public static WebView getWV() {
         return wv;
+    }
+
+    public PendingIntent getmNfcPendingIntent() {
+        return mNfcPendingIntent;
+    }
+
+    public void setmNfcPendingIntent(PendingIntent mNfcPendingIntent) {
+        this.mNfcPendingIntent = mNfcPendingIntent;
     }
 
     @Override
@@ -36,6 +46,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        if (framework != null && framework.checkNFC()) {
+            framework.getmNfcAdapter().disableForegroundDispatch(this);
+        }
+
     }
 
     @Override
@@ -50,9 +64,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        setIntent(new Intent());
         if (framework != null && framework.checkNFC()) {
             framework.getmNfcAdapter().enableForegroundDispatch(this, mNfcPendingIntent, null, null);
-            framework.resolveIntent(getIntent());
         }
     }
 
@@ -68,6 +82,7 @@ public class MainActivity extends Activity {
         mNfcPendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
+
         wv = (WebView) findViewById(R.id.webview);
         wai = new WebAppInterface(this);
         wv.addJavascriptInterface(wai, "Android");
@@ -77,6 +92,10 @@ public class MainActivity extends Activity {
         wv.setWebViewClient(new WebViewClient() {});
 
         wv.loadUrl("http://nfc.net16.net/");
+
+        while (wv.getProgress() != 100) {
+        }
+        framework = new NFCFramework(this, wai);
         //>> WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
         //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN
         //>>                       WebAppInterface.firstload()

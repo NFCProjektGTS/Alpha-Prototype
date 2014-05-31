@@ -2,6 +2,7 @@ package de.Alpha.nfc_alpha;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -16,16 +17,24 @@ import android.os.Parcelable;
 public class NFCFramework {
 
     protected NfcAdapter mNfcAdapter;
+    protected Context caller;
     protected Tag TAG;
     protected boolean WriteMode;
     protected WebAppInterface wai;
     protected boolean enabled = false;
+    protected IntentFilter[] mTagFilters;
 
     NFCFramework(Context caller, WebAppInterface wai) {
+        this.caller = caller;
         this.wai = wai;
-        wai.printDebugInfo("Initialzing NFC Framework");
+        this.wai.printDebugInfo("Initialzing NFC Framework");
         this.mNfcAdapter = NfcAdapter.getDefaultAdapter(caller);
         this.enabled = checkNFC();
+
+        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
+        this.mTagFilters = new IntentFilter[]{tagDetected};
+
+
 
     }
 
@@ -75,6 +84,7 @@ public class NFCFramework {
             printTag(msgs);
         }
     }
+
 
     public byte[] rawTagData(Parcelable parc) {
         StringBuilder s = new StringBuilder();
@@ -142,7 +152,8 @@ public class NFCFramework {
     }
 
     public void printTag(NdefMessage[] msgs) {
-        //System.out.println(msgs.toString());
+
+        System.out.println(msgs.toString());
         //System.out.println(msgs);
     }
 
