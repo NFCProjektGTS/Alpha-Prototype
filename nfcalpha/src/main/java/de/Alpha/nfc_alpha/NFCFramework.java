@@ -20,6 +20,7 @@ public class NFCFramework {
     protected Context caller;
     protected Tag TAG;
     protected boolean WriteMode;
+    protected boolean used;
     protected WebAppInterface wai;
     protected boolean enabled = false;
     protected IntentFilter[] mTagFilters;
@@ -60,7 +61,7 @@ public class NFCFramework {
             }
         } else {
             wai.showNotification("NFC Hardware nicht gefunden","Bitte stellen sie sicher das ihr Gerät NFC unterstützt.");
-            wai.printDebugError("NFC Hardware not detected");
+            //wai.printDebugError("NFC Hardware not detected");
         }
         return false;
     }
@@ -89,6 +90,7 @@ public class NFCFramework {
     public byte[] rawTagData(Parcelable parc) {
         StringBuilder s = new StringBuilder();
         Tag tag = (Tag) parc;
+        TAG = tag;
         byte[] id = tag.getId();
         s.append("UID In Hex: ").append(Utils.convertByteArrayToHexString(id)).append("\n");
         s.append("UID In Dec: ").append(Utils.convertByteArrayToDecimal(id)).append("\n\n");
@@ -156,8 +158,6 @@ public class NFCFramework {
         wai.printDebugInfo(msgs.toString());
         //System.out.println(msgs);
     }
-
-    //printtagmanufacture
 
 
 }
