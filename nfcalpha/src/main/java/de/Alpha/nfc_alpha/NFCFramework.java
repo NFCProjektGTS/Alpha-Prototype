@@ -153,7 +153,7 @@ public class NFCFramework {
 
     public void printTag(NdefMessage[] msgs) {
 
-        System.out.println(msgs.toString());
+        wai.printDebugInfo(msgs.toString());
         //System.out.println(msgs);
     }
 
