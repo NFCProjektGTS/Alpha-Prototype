@@ -73,6 +73,7 @@ public class NFCFramework {
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            this.wai.printDebugInfo("Tag Discovered");
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage[] msgs;
             if (rawMsgs != null) {
