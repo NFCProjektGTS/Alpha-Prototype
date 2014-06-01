@@ -10,8 +10,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
+    public static NFCFramework framework;
     static private WebView wv;
-    public NFCFramework framework;
     protected PendingIntent mNfcPendingIntent;
     private WebAppInterface wai;
     private IntentFilter[] mWriteTagFilters;
@@ -26,6 +26,14 @@ public class MainActivity extends Activity {
 
     public void setmNfcPendingIntent(PendingIntent mNfcPendingIntent) {
         this.mNfcPendingIntent = mNfcPendingIntent;
+    }
+
+    public NFCFramework getFramework() {
+        return framework;
+    }
+
+    public void setFramework(NFCFramework framework) {
+        this.framework = framework;
     }
 
     @Override
@@ -69,7 +77,7 @@ public class MainActivity extends Activity {
         setIntent(new Intent());
         if (framework != null) {
             if (framework.checkNFC()) {
-                framework.getmNfcAdapter().enableForegroundDispatch(this, mNfcPendingIntent, null, null);
+                framework.installService();
             }
         }
     }

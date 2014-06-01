@@ -13,6 +13,7 @@ import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Parcelable;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -63,7 +64,12 @@ public class NFCFramework {
                     activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             mNfcAdapter.enableForegroundDispatch(caller, intent, mTagFilters, null);
         }
+    }
 
+    public void uninstallService() {
+        if (enabled) {
+            mNfcAdapter.disableForegroundDispatch(caller);
+        }
     }
 
     public NfcAdapter getmNfcAdapter() {
@@ -236,11 +242,14 @@ public class NFCFramework {
 
     public void enableWrite() {
         //allow write for next NFC intent
-        if (this.TAG != null && this.mWriteNdef != null) {
-            this.WriteMode = true;
-            installService();
-        } else {
-            wai.printDebugInfo("Please scan a NFC Tag to write on");
+        if (enabled) {
+            if (this.TAG != null && this.mWriteNdef != null) {
+                this.WriteMode = true;
+                installService();
+                Toast.makeText(caller, "Writemode enabled", Toast.LENGTH_LONG).show();
+            } else {
+                wai.printDebugInfo("Please scan a NFC Tag to write on");
+            }
         }
     }
 
