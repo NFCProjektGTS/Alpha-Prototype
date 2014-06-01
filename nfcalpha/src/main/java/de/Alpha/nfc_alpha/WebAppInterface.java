@@ -66,6 +66,18 @@ public class WebAppInterface {
     }
 
 
+    @JavascriptInterface
+    public void writeStummschalten() {
+    printDebugInfo("Schreibe Stummschalten");
+    }
+
+    @JavascriptInterface
+    public void writeKontakt() {
+    printDebugInfo("Schreibe Kontakt");
+    }
+
+
+
     public void showNotification(String s1, String s2) {
         run("notify(" + s1 + "," + s2 + ");");
         printDebugWarning("Notification:" + s1);
