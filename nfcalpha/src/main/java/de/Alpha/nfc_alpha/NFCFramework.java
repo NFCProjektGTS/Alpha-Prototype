@@ -157,7 +157,10 @@ public class NFCFramework {
 
     public void printTag(NdefMessage[] msgs) {
 
-        wai.printDebugInfo(msgs.toString());
+        byte[] payload = msgs[0].getRecords()[0].getPayload();
+        String content = new String(payload);
+        this.wai.printDebugInfo(content);
+        //wai.printDebugInfo(msgs.toString());
         //System.out.println(msgs);
     }
 
