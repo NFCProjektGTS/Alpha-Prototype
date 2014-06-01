@@ -107,6 +107,22 @@ public class NdefCreator {
         return ndef;
     }
 
+    public static NdefMessage vCard(String vcard) {
+        try {
+            byte[] uriField = vcard.getBytes(Charset.forName("US-ASCII"));
+            byte[] payload = new byte[uriField.length + 1];              //add 1 for the URI Prefix
+            System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
+
+            NdefRecord record = new NdefRecord(
+                    NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
+            NdefRecord[] records = new NdefRecord[]{record};
+            return new NdefMessage(records);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return getEmptyNdef();
+    }
+
     public NdefRecord uriRecord(String uri) {
         try {
             final byte[] uriBytes = uri.getBytes("UTF-8");
@@ -118,21 +134,6 @@ public class NdefCreator {
             System.out.println("UTF-8 Unsopported!!!");
             return null;
         }
-    }
-
-    public NdefMessage vCard(String vcard) {
-        try {
-            byte[] uriField = vcard.getBytes(Charset.forName("US-ASCII"));
-            byte[] payload = new byte[uriField.length + 1];              //add 1 for the URI Prefix
-            System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
-
-            NdefRecord nfcRecord = new NdefRecord(
-                    NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
-            return new NdefMessage(nfcRecord);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return getEmptyNdef();
     }
 
 
