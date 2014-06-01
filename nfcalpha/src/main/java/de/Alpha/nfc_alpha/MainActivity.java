@@ -93,9 +93,11 @@ public class MainActivity extends Activity {
 
         wv.loadUrl("http://nfc.net16.net/");
 
-        while (wv.getProgress() != 100) {
-        }
-        framework = new NFCFramework(this, wai);
+        //TODO was ist das
+        // while (wv.getProgress() != 100) {
+        //}
+        //framework = new NFCFramework(this, wai);
+
 
         // WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
         //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN

@@ -23,7 +23,6 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void showToast(String toast) {
-        System.out.println("Test1");
         NFCFramework framework = new NFCFramework(mContext, this);
 
 
@@ -42,7 +41,7 @@ public class WebAppInterface {
     public final void closeApp(){
         printDebugWarning("App geschlossen, da kein NFC aktiviert wird.");
         //wv.destroy();
-        showNotification("NFC nicht aktiviert","Wenn NFC nicht aktiviert ist können Teile der App nicht genutzt werden.");
+        showNotification("NFC nicht aktiviert!","Wenn NFC nicht aktiviert ist können Teile der App nicht genutzt werden."); //TODO FIXEN [INFO:CONSOLE(1)] "Uncaught SyntaxError: Unexpected identifier", source: http://nfc.net16.net/ (1)
 
         //TODO App schließen hier rein    geht nicht???-> new MainActivity().finish();
     }
@@ -69,7 +68,10 @@ public class WebAppInterface {
     }
 
 
-    public void showNotification(String s1,String s2){run("notify("+s1+","+s2+");");printDebugWarning("Notification:"+s1);} //S1 Überschrift / S2 Details
+    public void showNotification(String s1,String s2){     //S1 Überschrift / S2 Details
+        run("notify('"+s1+"','"+s2+"');");
+        printDebugWarning("Notification:"+s1);
+    }
     public void hideNotification(){run("hidenotify();");}
     public void printDebugInfo(String s) {run("debug(0,'I: " + s + "');");}
     public void printDebugWarning(String s) {
@@ -79,5 +81,8 @@ public class WebAppInterface {
         run("debug(2,'E: " + s + "');");
     }
 
+    public void setNFCinfo(String type,String manufacture,float size,String data, boolean readonly,String rest1, String rest2){
+     run("TagInfo('"+type+"','"+manufacture+"','"+size+"','"+data+"','"+readonly+"','"+rest1+"','"+rest2+"');");
+    }
 
 }

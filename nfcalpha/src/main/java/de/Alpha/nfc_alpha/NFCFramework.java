@@ -35,7 +35,7 @@ public class NFCFramework {
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         this.mTagFilters = new IntentFilter[]{tagDetected};
 
-
+    wai.setNFCinfo("test1","test2",1,"test3",true,"test4","test5");
 
     }
 
@@ -141,7 +141,8 @@ public class NFCFramework {
                 s.append("Mifare Ultralight type: ").append(type);
                 }
             }
-
+        System.out.println(s.toString());
+        wai.printDebugInfo(s.toString());
         return s.toString().getBytes();
     }
 
@@ -150,16 +151,17 @@ public class NFCFramework {
         byte[] id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
         Parcelable tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         byte[] payload = rawTagData(tag);
+
         NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
         NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
         return new NdefMessage[]{msg};
     }
 
     public void printTag(NdefMessage[] msgs) {
-
         byte[] payload = msgs[0].getRecords()[0].getPayload();
         String content = new String(payload);
         this.wai.printDebugInfo(content);
+
         //wai.printDebugInfo(msgs.toString());
         //System.out.println(msgs);
     }
