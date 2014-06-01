@@ -6,6 +6,7 @@ import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import static de.Alpha.nfc_alpha.MainActivity.framework;
 import static de.Alpha.nfc_alpha.MainActivity.getWV;
 
 /**
@@ -23,7 +24,6 @@ public class WebAppInterface {
     @JavascriptInterface
     public void showToast(String toast) {
         MainActivity.framework.enableWrite();
-
     }
 
     @JavascriptInterface
@@ -62,18 +62,24 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void firstload() {
+        MainActivity.framework = new NFCFramework(mContext, this);
+        framework.installService();
         //new NFCFramework(mContext,this);
     }
 
 
     @JavascriptInterface
     public void writeStummschalten() {
-    printDebugInfo("Schreibe Stummschalten");
+
+        printDebugInfo("Schreibe Stummschalten");
     }
 
     @JavascriptInterface
     public void writeKontakt() {
-    printDebugInfo("Schreibe Kontakt");
+
+
+        printDebugInfo("Schreibe Kontakt");
+
     }
 
 

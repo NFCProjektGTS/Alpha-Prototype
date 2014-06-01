@@ -5,13 +5,13 @@ import android.nfc.NdefRecord;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 /**
  * Created by Noli on 01.06.2014.
  */
 public class NdefCreator {
     public static final byte[] RTD_ANDROID_APP = "android.com:pkg".getBytes(); /* https://github.com/Mobisocial/EasyNFC/blob/master/src/main/java/mobisocial/nfc/NdefFactory.java#L39 */
-
     private static final String[] URI_PREFIXES = new String[]{
             "",
             "http://www.",
@@ -118,6 +118,22 @@ public class NdefCreator {
             return null;
         }
     }
+
+    public NdefMessage vCard(String vcard) {
+        try {
+            byte[] uriField = vcard.getBytes(Charset.forName("US-ASCII"));
+            byte[] payload = new byte[uriField.length + 1];              //add 1 for the URI Prefix
+            System.arraycopy(uriField, 0, payload, 1, uriField.length);  //appends URI to payload
+
+            NdefRecord nfcRecord = new NdefRecord(
+                    NdefRecord.TNF_MIME_MEDIA, "text/vcard".getBytes(), new byte[0], payload);
+            return new NdefMessage(nfcRecord);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return getEmptyNdef();
+    }
+
 
 
 }

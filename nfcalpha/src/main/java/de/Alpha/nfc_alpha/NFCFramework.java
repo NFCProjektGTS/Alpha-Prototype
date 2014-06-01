@@ -118,8 +118,10 @@ public class NFCFramework {
                 mCurrentNdef = msgs;
                 printTag(mCurrentNdef);
             } else {
-                OnTagWriteListener writelisten = tagListener;
-                writelisten.onTagWrite(writeTag(TAG, mWriteNdef[0]));
+                if (TAG != null && mWriteNdef[0] != null) {
+                    OnTagWriteListener writelisten = tagListener;
+                    writelisten.onTagWrite(writeTag(TAG, mWriteNdef[0]));
+                }
             }
         }
 

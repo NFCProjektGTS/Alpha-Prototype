@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 public class MainActivity extends Activity {
     public static NFCFramework framework;
@@ -101,15 +100,6 @@ public class MainActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         String url = "http://nfc.net16.net/";
         wv.loadUrl(url);
-        wv.setWebViewClient(new WebViewClient() {
-            public void onPageFinished(WebView view, String url) {
-                // do your stuff here
-                framework = new NFCFramework(test, wai);
-                //Muss von mainactivity aufgerufen werden!
-                framework.installService();
-            }
-        });
-
 
         // WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
         //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN
@@ -117,7 +107,6 @@ public class MainActivity extends Activity {
         //framework = new NFCFramework(this, wai);
 
     }
-
 
     @Override
     public void finish() {
