@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
  */
 public class NdefCreator {
     public static final byte[] RTD_ANDROID_APP = "android.com:pkg".getBytes(); /* https://github.com/Mobisocial/EasyNFC/blob/master/src/main/java/mobisocial/nfc/NdefFactory.java#L39 */
+
     private static final String[] URI_PREFIXES = new String[]{
             "",
             "http://www.",
