@@ -2,6 +2,7 @@ package de.Alpha.nfc_alpha;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
@@ -76,7 +77,9 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void writeKontakt() {
-
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+        mContext.startActivityForResult(intent, 1);
         printDebugInfo("Schreibe Kontakt");
 
     }

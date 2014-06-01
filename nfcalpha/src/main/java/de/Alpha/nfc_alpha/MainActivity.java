@@ -126,12 +126,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void getContact() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-        startActivityForResult(intent, 1);
-    }
-
     @Override
     public void finish() {
         super.finish();
