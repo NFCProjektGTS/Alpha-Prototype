@@ -46,10 +46,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (framework != null && framework.checkNFC()) {
-            framework.getmNfcAdapter().disableForegroundDispatch(this);
-        }
+        if (framework != null) {
+            if (framework.checkNFC()) {
+                framework.getmNfcAdapter().disableForegroundDispatch(this);
 
+            }
+        }
     }
 
     @Override
@@ -65,8 +67,10 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         setIntent(new Intent());
-        if (framework != null && framework.checkNFC()) {
-            framework.getmNfcAdapter().enableForegroundDispatch(this, mNfcPendingIntent, null, null);
+        if (framework != null) {
+            if (framework.checkNFC()) {
+                framework.getmNfcAdapter().enableForegroundDispatch(this, mNfcPendingIntent, null, null);
+            }
         }
     }
 
@@ -77,10 +81,9 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Activity test = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mNfcPendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
 
         wv = (WebView) findViewById(R.id.webview);
@@ -88,14 +91,17 @@ public class MainActivity extends Activity {
         wv.addJavascriptInterface(wai, "Android");
         WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        //wv.loadUrl("http://nfc.net16.net/");
-        wv.setWebViewClient(new WebViewClient() {});
+        String url = "http://nfc.net16.net/";
+        wv.loadUrl(url);
+        wv.setWebViewClient(new WebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                // do your stuff here
+                framework = new NFCFramework(test, wai);
+                //Muss von mainactivity aufgerufen werden!
+                framework.installService();
+            }
+        });
 
-        wv.loadUrl("http://nfc.net16.net/");
-
-        while (wv.getProgress() != 100) {
-        }
-        framework = new NFCFramework(this, wai);
 
         // WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
         //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN

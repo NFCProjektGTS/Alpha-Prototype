@@ -1,6 +1,7 @@
 package de.Alpha.nfc_alpha;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
@@ -9,7 +10,11 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareClassic;
 import android.nfc.tech.MifareUltralight;
+import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
 import android.os.Parcelable;
+
+import java.io.IOException;
 
 /**
  * Created by Noli on 27.05.2014.
@@ -17,15 +22,18 @@ import android.os.Parcelable;
 public class NFCFramework {
 
     protected NfcAdapter mNfcAdapter;
-    protected Context caller;
+    protected Activity caller;
     protected Tag TAG;
-    protected boolean WriteMode;
+    protected boolean WriteMode = false;
     protected boolean used;
     protected WebAppInterface wai;
     protected boolean enabled = false;
     protected IntentFilter[] mTagFilters;
+    protected NdefMessage[] mCurrentNdef;
+    protected NdefMessage[] mWriteNdef;
+    protected OnTagWriteListener tagListener = null;
 
-    NFCFramework(Context caller, WebAppInterface wai) {
+    NFCFramework(Activity caller, WebAppInterface wai) {
         this.caller = caller;
         this.wai = wai;
         this.wai.printDebugInfo("Initialzing NFC Framework");
@@ -36,6 +44,25 @@ public class NFCFramework {
         this.mTagFilters = new IntentFilter[]{tagDetected};
 
 
+    }
+
+    public OnTagWriteListener getTagListener() {
+        return tagListener;
+    }
+
+    public void setTagListener(OnTagWriteListener tagListener) {
+        this.tagListener = tagListener;
+    }
+
+    public void installService() {
+        if (enabled) {
+            Intent activityIntent = new Intent(caller, caller.getClass());
+            activityIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            PendingIntent intent = PendingIntent.getActivity(caller, 0,
+                    activityIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            mNfcAdapter.enableForegroundDispatch(caller, intent, mTagFilters, null);
+        }
 
     }
 
@@ -43,9 +70,6 @@ public class NFCFramework {
         return mNfcAdapter;
     }
 
-    public void setmNfcAdapter(NfcAdapter mNfcAdapter) {
-        this.mNfcAdapter = mNfcAdapter;
-    }
 
     public boolean checkNFC() {
         if (mNfcAdapter != null) {
@@ -73,19 +97,26 @@ public class NFCFramework {
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             this.wai.printDebugInfo("Tag Discovered");
-            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            NdefMessage[] msgs;
-            if (rawMsgs != null) {
-                msgs = new NdefMessage[rawMsgs.length];
-                for (int i = 0; i < rawMsgs.length; i++) {
-                    msgs[i] = (NdefMessage) rawMsgs[i];
-                }
-            } else {
-                msgs = RawNDEFContent(intent);
+            if (!WriteMode) {
+                Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+                NdefMessage[] msgs;
+                if (rawMsgs != null) {
+                    msgs = new NdefMessage[rawMsgs.length];
+                    for (int i = 0; i < rawMsgs.length; i++) {
+                        msgs[i] = (NdefMessage) rawMsgs[i];
+                    }
+                } else {
+                    msgs = RawNDEFContent(intent);
 
+                }
+                mCurrentNdef = msgs;
+                printTag(mCurrentNdef);
+            } else {
+                OnTagWriteListener writelisten = tagListener;
+                writelisten.onTagWrite(writeTag(TAG, mWriteNdef[0]));
             }
-            printTag(msgs);
-        }
+            }
+
     }
 
 
@@ -164,5 +195,67 @@ public class NFCFramework {
         //System.out.println(msgs);
     }
 
+    private int writeTag(Tag tag, NdefMessage message) {
+        try {
+            int size = message.toByteArray().length;
+            Ndef ndef = Ndef.get(tag);
+            if (ndef != null) {
+                ndef.connect();
+                if (!ndef.isWritable()) {
+                    wai.printDebugInfo("Tag is read-only.");
+                    return OnTagWriteListener.WRITE_ERROR_READ_ONLY;
+                }
+                if (ndef.getMaxSize() < size) {
+                    wai.printDebugInfo("Tag capacity is " + ndef.getMaxSize() + " bytes, message is " +
+                            size + " bytes.");
+                    return OnTagWriteListener.WRITE_ERROR_CAPACITY;
+                }
+
+                ndef.writeNdefMessage(message);
+                return OnTagWriteListener.WRITE_OK;
+            } else {
+                NdefFormatable format = NdefFormatable.get(tag);
+                if (format != null) {
+                    try {
+                        format.connect();
+                        format.format(message);
+                        return OnTagWriteListener.WRITE_OK;
+                    } catch (IOException e) {
+                        return OnTagWriteListener.WRITE_ERROR_IO_EXCEPTION;
+                    }
+                } else {
+                    return OnTagWriteListener.WRITE_ERROR_BAD_FORMAT;
+                }
+            }
+        } catch (Exception e) {
+            wai.printDebugInfo("Failed to write tag: " + e);
+        }
+
+        return OnTagWriteListener.WRITE_ERROR_IO_EXCEPTION;
+    }
+
+    public void enableWrite() {
+        //allow write for next NFC intent
+        if (this.TAG != null && this.mWriteNdef != null) {
+            this.WriteMode = true;
+            installService();
+        } else {
+            wai.printDebugInfo("Please scan a NFC Tag to write on");
+        }
+    }
+
+    public void createWriteNdef(String text) {
+        this.mWriteNdef[0] = NdefCreator.fromText(text, "DE-de");
+    }
+
+    public interface OnTagWriteListener {
+        public static final int WRITE_OK = 0;
+        public static final int WRITE_ERROR_READ_ONLY = 1;
+        public static final int WRITE_ERROR_CAPACITY = 2;
+        public static final int WRITE_ERROR_BAD_FORMAT = 3;
+        public static final int WRITE_ERROR_IO_EXCEPTION = 4;
+
+        public void onTagWrite(int status);
+    }
 
 }
