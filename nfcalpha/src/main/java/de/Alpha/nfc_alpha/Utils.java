@@ -1,5 +1,8 @@
 package de.Alpha.nfc_alpha;
 
+import android.content.Context;
+import android.media.AudioManager;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -18,4 +21,15 @@ public class Utils {
         ByteBuffer bb = ByteBuffer.wrap(array);
         return bb.getLong();
     }
+
+    public static void setSilent(Context ctx) {
+        AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+    }
+
+    public static void setNormal(Context ctx) {
+        AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+    }
+
 }

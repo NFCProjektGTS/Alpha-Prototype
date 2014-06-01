@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -14,6 +17,9 @@ public class MainActivity extends Activity {
     protected PendingIntent mNfcPendingIntent;
     private WebAppInterface wai;
     private IntentFilter[] mWriteTagFilters;
+    ///
+    private String vCard;
+
 
     public static WebView getWV() {
         return wv;
@@ -88,7 +94,6 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Activity test = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -106,6 +111,25 @@ public class MainActivity extends Activity {
         //>>                       WebAppInterface.firstload()
         //framework = new NFCFramework(this, wai);
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Uri contactData = data.getData();
+                Cursor cursor = managedQuery(contactData, null, null, null, null);
+                cursor.moveToFirst();
+                vCard = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE));
+            }
+        }
+    }
+
+    public void getContact() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+        startActivityForResult(intent, 1);
     }
 
     @Override

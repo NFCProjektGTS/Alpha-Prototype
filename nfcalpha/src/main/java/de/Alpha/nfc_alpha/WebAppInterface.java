@@ -77,11 +77,9 @@ public class WebAppInterface {
     @JavascriptInterface
     public void writeKontakt() {
 
-
         printDebugInfo("Schreibe Kontakt");
 
     }
-
 
 
     public void showNotification(String s1, String s2) {

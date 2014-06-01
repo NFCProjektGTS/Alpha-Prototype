@@ -255,8 +255,8 @@ public class NFCFramework {
         }
     }
 
-    public void createWriteNdef(String text) {
-        this.mWriteNdef[0] = NdefCreator.fromText(text, "DE-de");
+    public void createWriteNdef(NdefMessage message) {
+        this.mWriteNdef[0] = message;
     }
 
     public interface OnTagWriteListener {
