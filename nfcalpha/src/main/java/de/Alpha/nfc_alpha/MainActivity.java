@@ -84,8 +84,6 @@ public class MainActivity extends Activity {
         final Activity test = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mNfcPendingIntent = PendingIntent.getActivity(
-                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
 
 
         wv = (WebView) findViewById(R.id.webview);
@@ -104,7 +102,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        
 
         // WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
         //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN

@@ -1,33 +1,30 @@
 package de.Alpha.nfc_alpha;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import static de.Alpha.nfc_alpha.MainActivity.*;
+import static de.Alpha.nfc_alpha.MainActivity.getWV;
 
 /**
  * Created by Kern on 27.05.2014.
  */
 public class WebAppInterface {
-    Context mContext;
-     WebView wv = getWV();
+    Activity mContext;
+    WebView wv = getWV();
 
 
-    WebAppInterface(Context c) {
+    WebAppInterface(Activity c) {
         mContext = c;
     }
 
     @JavascriptInterface
     public void showToast(String toast) {
-        System.out.println("Test1");
-        NFCFramework framework = new NFCFramework(mContext, this);
 
-
-        Toast.makeText(mContext, toast, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "Writemode enabled", Toast.LENGTH_LONG).show();
 
     }
     @JavascriptInterface
@@ -65,7 +62,7 @@ public class WebAppInterface {
     }
     @JavascriptInterface
     public void firstload() {
-        new NFCFramework(mContext,this);
+        //new NFCFramework(mContext,this);
     }
 
 

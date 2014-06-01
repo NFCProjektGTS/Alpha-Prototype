@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Alpha-Prototype.iml" filepath="$PROJECT_DIR$/Alpha-Prototype.iml" />
       <module fileurl="file://$PROJECT_DIR$/nfcalpha/nfcalpha.iml" filepath="$PROJECT_DIR$/nfcalpha/nfcalpha.iml" />
     </modules>
   </component>
