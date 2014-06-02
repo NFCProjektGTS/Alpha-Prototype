@@ -24,7 +24,7 @@ public class NFCFramework {
 
     protected NfcAdapter mNfcAdapter;
     protected Activity caller;
-    protected Tag TAG;
+    protected Tag wTAG;
     protected boolean WriteMode = false;
     protected boolean used;
     protected WebAppInterface wai;
@@ -103,9 +103,9 @@ public class NFCFramework {
                 || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
                 || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             this.wai.printDebugInfo("Tag Discovered");
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            NdefMessage[] msgs;
             if (!WriteMode) {
-                Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-                NdefMessage[] msgs;
                 if (rawMsgs != null) {
                     msgs = new NdefMessage[rawMsgs.length];
                     for (int i = 0; i < rawMsgs.length; i++) {
@@ -118,9 +118,10 @@ public class NFCFramework {
                 mCurrentNdef = msgs;
                 printTag(mCurrentNdef);
             } else {
-                if (TAG != null && mWriteNdef[0] != null) {
+                wTAG = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+                if (wTAG != null && mWriteNdef[0] != null) {
                     OnTagWriteListener writelisten = tagListener;
-                    writelisten.onTagWrite(writeTag(TAG, mWriteNdef[0]));
+                    writelisten.onTagWrite(writeTag(wTAG, mWriteNdef[0]));
                 }
             }
         }
@@ -131,7 +132,6 @@ public class NFCFramework {
     public byte[] rawTagData(Parcelable parc) {
         StringBuilder s = new StringBuilder();
         Tag tag = (Tag) parc;
-        TAG = tag;
         byte[] id = tag.getId();
         s.append("UID In Hex: ").append(Utils.convertByteArrayToHexString(id)).append("\n");
         s.append("UID In Dec: ").append(Utils.convertByteArrayToDecimal(id)).append("\n\n");
@@ -258,7 +258,7 @@ public class NFCFramework {
     public void enableWrite() {
         //allow write for next NFC intent
         if (enabled) {
-            if (this.TAG != null && this.mWriteNdef != null) {
+            if (this.wTAG != null && this.mWriteNdef != null) {
                 this.WriteMode = true;
                 installService();
                 Toast.makeText(caller, "Writemode enabled", Toast.LENGTH_LONG).show();
@@ -274,7 +274,7 @@ public class NFCFramework {
 
     public void disableWrite(){
     if(enabled){
-    this.TAG = null;
+        this.wTAG = null;
     this.mWriteNdef = null;
     this.WriteMode = false;
     uninstallService();
