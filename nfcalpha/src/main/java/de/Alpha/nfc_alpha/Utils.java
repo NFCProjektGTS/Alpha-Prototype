@@ -22,14 +22,13 @@ public class Utils {
         return bb.getLong();
     }
 
-    public static void setSilent(Context ctx) {
+    public static void toggleSilent(Context ctx) {
         AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-        am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-    }
+        if (am.getRingerMode() != AudioManager.RINGER_MODE_SILENT) {
+            am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+        } else {
+            am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        }
 
-    public static void setNormal(Context ctx) {
-        AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-        am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
     }
-
 }

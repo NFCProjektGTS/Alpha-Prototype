@@ -262,7 +262,7 @@ public class NFCFramework {
         }
     }
 
-    public void createWriteNdef(NdefMeessage message) {
+    public void createWriteNdef(NdefMessage message) {
         this.mWriteNdef[0] = message;
     }
 

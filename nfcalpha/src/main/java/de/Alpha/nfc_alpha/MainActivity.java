@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
+
+import java.io.FileInputStream;
 
 public class MainActivity extends Activity {
     public static NFCFramework framework;
@@ -119,9 +123,30 @@ public class MainActivity extends Activity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Uri contactData = data.getData();
+
                 Cursor cursor = managedQuery(contactData, null, null, null, null);
                 cursor.moveToFirst();
-                vCard = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE));
+                String lookupKey = cursor.getString(cursor
+                        .getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                Uri uri = Uri.withAppendedPath(
+                        ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+                AssetFileDescriptor fd;
+                String name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                try {
+                    fd = getContentResolver().openAssetFileDescriptor(uri,
+                            "r");
+                    FileInputStream fis = fd.createInputStream();
+                    byte[] buf = new byte[(int) fd.getDeclaredLength()];
+                    fis.read(buf);
+                    vCard = new String(buf);
+                    Toast.makeText(this, "Contact: " + name + " selected to write on NFC-Tag!", Toast.LENGTH_LONG).show();
+                    System.out.println(vCard);
+
+                } catch (Exception e) {
+                    Toast.makeText(this, "Failed to load Contact: " + name, Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+
             }
         }
     }

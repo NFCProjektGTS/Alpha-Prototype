@@ -77,9 +77,7 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void writeKontakt() {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
-        mContext.startActivityForResult(intent, 1);
+        mContext.startActivityForResult(new Intent(Intent.ACTION_GET_CONTENT).setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE), 1);
         printDebugInfo("Schreibe Kontakt");
 
     }
