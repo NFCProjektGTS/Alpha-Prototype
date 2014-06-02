@@ -106,6 +106,7 @@ public class NFCFramework {
             Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage[] msgs;
             if (!WriteMode) {
+                this.wai.printDebugInfo("Reading");
                 if (rawMsgs != null) {
                     msgs = new NdefMessage[rawMsgs.length];
                     for (int i = 0; i < rawMsgs.length; i++) {
@@ -118,6 +119,7 @@ public class NFCFramework {
                 mCurrentNdef = msgs;
                 printTag(mCurrentNdef);
             } else {
+                this.wai.printDebugInfo("Writing");
                 wTAG = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 if (wTAG != null && mWriteNdef[0] != null) {
                     OnTagWriteListener writelisten = tagListener;
@@ -182,7 +184,7 @@ public class NFCFramework {
         }
 
         return s.toString().getBytes();
-    }
+    } //Only reading
 
     public NdefMessage[] RawNDEFContent(Intent intent) {
         byte[] empty = new byte[0];
@@ -192,7 +194,7 @@ public class NFCFramework {
         NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, id, payload);
         NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
         return new NdefMessage[]{msg};
-    }
+    } //Only reading
 
     public void printTag(NdefMessage[] msgs) {
         for (NdefMessage msg : msgs) {
@@ -209,6 +211,7 @@ public class NFCFramework {
     }
 
     private int writeTag(Tag tag, NdefMessage message) {
+        this.wai.printDebugInfo("We inside Magic <3");
         try {
             int size = message.toByteArray().length;
             Ndef ndef = Ndef.get(tag);
