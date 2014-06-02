@@ -3,6 +3,7 @@ package de.Alpha.nfc_alpha;
 import android.app.Activity;
 import android.content.Intent;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -40,8 +41,10 @@ public class WebAppInterface {
         //new NFCFramework(mContext,this);
     }
 
+    @JavascriptInterface
     public void activeNFC() {
-        framework.setEnabled(framework.checkNFC());
+        printDebugInfo("NFC Einstllungen geöffnet zum aktivieren");
+        mContext.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET));
     }
 
 
