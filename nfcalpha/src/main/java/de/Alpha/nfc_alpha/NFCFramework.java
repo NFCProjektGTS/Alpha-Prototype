@@ -277,11 +277,11 @@ public class NFCFramework {
             for (NdefRecord rec : ms.getRecords()) {
                 byte[] type = rec.getType();
                 String contenttype = new String(type);
+
                 // if statements in case no switch-case possible with Strings; usually impleneted in JDK7
-                if (contenttype == Operations.OPC_CONTACT) {
+                if (contenttype.equals(Operations.OPC_CONTACT)) {
                     //automatically handled in android os
-                }
-                if (contenttype == Operations.OPC_SILENT) {
+                }else if (contenttype.equals(Operations.OPC_SILENT)) {
                     Utils.toggleSilent(caller);
                     Toast.makeText(caller, "Mute Tag detected! Toggle Audiostate!", Toast.LENGTH_LONG).show();
                 }
