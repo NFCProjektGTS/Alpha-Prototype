@@ -42,7 +42,7 @@ public class WebAppInterface {
     }
 
     @JavascriptInterface
-    public void activeNFC() {
+    public void activateNFC() {
         printDebugInfo("NFC Einstllungen geöffnet zum aktivieren");
         mContext.startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET));
     }
