@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
+import android.nfc.NdefMessage;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.webkit.WebSettings;
@@ -16,14 +17,15 @@ import android.widget.Toast;
 import java.io.FileInputStream;
 
 public class MainActivity extends Activity {
+
+
+    /// static in case used nearly everywhere
+    public static String payload;
     public static NFCFramework framework;
     static private WebView wv;
     protected PendingIntent mNfcPendingIntent;
     private WebAppInterface wai;
     private IntentFilter[] mWriteTagFilters;
-    ///
-    private String vCard;
-
 
     public static WebView getWV() {
         return wv;
@@ -35,14 +37,6 @@ public class MainActivity extends Activity {
 
     public void setmNfcPendingIntent(PendingIntent mNfcPendingIntent) {
         this.mNfcPendingIntent = mNfcPendingIntent;
-    }
-
-    public NFCFramework getFramework() {
-        return framework;
-    }
-
-    public void setFramework(NFCFramework framework) {
-        this.framework = framework;
     }
 
     @Override
@@ -101,7 +95,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        NdefMessage test = NdefCreator.vCard("TEST");
         wv = (WebView) findViewById(R.id.webview);
         wai = new WebAppInterface(this);
         wv.addJavascriptInterface(wai, "Android");
@@ -138,9 +132,9 @@ public class MainActivity extends Activity {
                     FileInputStream fis = fd.createInputStream();
                     byte[] buf = new byte[(int) fd.getDeclaredLength()];
                     fis.read(buf);
-                    vCard = new String(buf);
+                    payload = new String(buf);
                     Toast.makeText(this, "Contact: " + name + " selected to write on NFC-Tag!", Toast.LENGTH_LONG).show();
-                    System.out.println(vCard);
+                    //System.out.println(payload);
 
                 } catch (Exception e) {
                     Toast.makeText(this, "Failed to load Contact: " + name, Toast.LENGTH_LONG).show();

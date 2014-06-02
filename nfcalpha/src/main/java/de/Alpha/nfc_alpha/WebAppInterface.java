@@ -9,6 +9,7 @@ import android.webkit.WebView;
 
 import static de.Alpha.nfc_alpha.MainActivity.framework;
 import static de.Alpha.nfc_alpha.MainActivity.getWV;
+import static de.Alpha.nfc_alpha.MainActivity.payload;
 
 /**
  * Created by Kern on 27.05.2014.
@@ -78,6 +79,9 @@ public class WebAppInterface {
     @JavascriptInterface
     public void writeKontakt() {
         mContext.startActivityForResult(new Intent(Intent.ACTION_GET_CONTENT).setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE), 1);
+        if (payload != null) {
+            MainActivity.framework.createWriteNdef(NdefCreator.vCard(payload));
+        }
         printDebugInfo("Schreibe Kontakt");
 
     }

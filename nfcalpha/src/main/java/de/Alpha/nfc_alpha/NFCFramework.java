@@ -230,7 +230,8 @@ public class NFCFramework {
                     try {
                         format.connect();
                         format.format(message);
-			disableWrite(); 
+                        disableWrite();
+                        this.mWriteNdef = null;
                         return OnTagWriteListener.WRITE_OK;
                     } catch (IOException e) {
                         disableWrite(); 
