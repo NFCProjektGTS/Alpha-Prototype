@@ -40,6 +40,8 @@ public class NFCFramework {
         this.mNfcAdapter = NfcAdapter.getDefaultAdapter(caller);
         this.enabled = checkNFC();
 
+        if (enabled) wai.printDebugInfo("Adapter found: " + mNfcAdapter.toString());
+
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         this.mTagFilters = new IntentFilter[]{tagDetected};
 
@@ -70,8 +72,6 @@ public class NFCFramework {
 
     public boolean checkNFC() {
         if (mNfcAdapter != null) {
-            wai.printDebugInfo("Adapter found: " + mNfcAdapter.toString());
-
             if (!mNfcAdapter.isEnabled()) {
                 wai.printDebugInfo("NFC is disabled");
                 wai.printDebugInfo("Opening NFC Activation Dialog");
@@ -229,7 +229,6 @@ public class NFCFramework {
                         format.connect();
                         format.format(message);
                         disableWrite();
-                        this.mWriteNdef = null;
                         return OnTagWriteListener.WRITE_OK;
                     } catch (IOException e) {
                         disableWrite();
