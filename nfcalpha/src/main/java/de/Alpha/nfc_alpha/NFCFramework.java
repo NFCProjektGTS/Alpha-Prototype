@@ -272,19 +272,21 @@ public class NFCFramework {
         }
     }
 
-    public void createWriteNdef(NdefMessage message) {
-        this.mWriteNdef[0] = message;
+    public void disableWrite() {
+        if (enabled) {
+            this.wTAG = null;
+            this.mWriteNdef = null;
+            this.WriteMode = false;
+            uninstallService();
+            Toast.makeText(caller, "Writemode disabled", Toast.LENGTH_LONG).show();
+        }
     }
 
-    public void disableWrite(){
-    if(enabled){
-        this.wTAG = null;
-    this.mWriteNdef = null;
-    this.WriteMode = false;
-    uninstallService();
-    Toast.makeText(caller, "Writemode disabled", Toast.LENGTH_LONG).show();
+    public void createWriteNdef(NdefMessage message) {
+        NdefMessage[] temp = {message};
+        this.mWriteNdef = temp;
     }
-    }
+
 
     public interface OnTagWriteListener {
         public static final int WRITE_OK = 0;
