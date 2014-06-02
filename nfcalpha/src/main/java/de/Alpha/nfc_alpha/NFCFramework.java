@@ -211,15 +211,18 @@ public class NFCFramework {
                 ndef.connect();
                 if (!ndef.isWritable()) {
                     wai.printDebugInfo("Tag is read-only.");
+		    disableWrite();
                     return OnTagWriteListener.WRITE_ERROR_READ_ONLY;
                 }
                 if (ndef.getMaxSize() < size) {
                     wai.printDebugInfo("Tag capacity is " + ndef.getMaxSize() + " bytes, message is " +
                             size + " bytes.");
+		    disableWrite(); 
                     return OnTagWriteListener.WRITE_ERROR_CAPACITY;
                 }
 
                 ndef.writeNdefMessage(message);
+		disableWrite();
                 return OnTagWriteListener.WRITE_OK;
             } else {
                 NdefFormatable format = NdefFormatable.get(tag);
@@ -227,18 +230,22 @@ public class NFCFramework {
                     try {
                         format.connect();
                         format.format(message);
+			disableWrite(); 
                         return OnTagWriteListener.WRITE_OK;
                     } catch (IOException e) {
+                        disableWrite(); 
                         return OnTagWriteListener.WRITE_ERROR_IO_EXCEPTION;
                     }
                 } else {
+		    disableWrite(); 
                     return OnTagWriteListener.WRITE_ERROR_BAD_FORMAT;
                 }
             }
         } catch (Exception e) {
+	    disableWrite(); 
             wai.printDebugInfo("Failed to write tag: " + e);
-        }
-
+        }	
+	disableWrite(); 
         return OnTagWriteListener.WRITE_ERROR_IO_EXCEPTION;
     }
 
@@ -255,8 +262,18 @@ public class NFCFramework {
         }
     }
 
-    public void createWriteNdef(NdefMessage message) {
+    public void createWriteNdef(NdefMeessage message) {
         this.mWriteNdef[0] = message;
+    }
+
+    public void disableWrite(){
+    if(enabled){
+    this.TAG = null;
+    this.mWriteNdef = null;
+    this.WriteMode = false;
+    uninstallService();
+    Toast.makeText(caller, "Writemode disabled", Toast.LENGTH_LONG).show();
+    }
     }
 
     public interface OnTagWriteListener {
