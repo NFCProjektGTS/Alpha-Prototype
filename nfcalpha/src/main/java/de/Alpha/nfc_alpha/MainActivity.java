@@ -1,9 +1,7 @@
 package de.Alpha.nfc_alpha;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
@@ -23,20 +21,10 @@ public class MainActivity extends Activity {
     public static String payload;
     public static NFCFramework framework;
     static private WebView wv;
-    protected PendingIntent mNfcPendingIntent;
     private WebAppInterface wai;
-    private IntentFilter[] mWriteTagFilters;
 
     public static WebView getWV() {
         return wv;
-    }
-
-    public PendingIntent getmNfcPendingIntent() {
-        return mNfcPendingIntent;
-    }
-
-    public void setmNfcPendingIntent(PendingIntent mNfcPendingIntent) {
-        this.mNfcPendingIntent = mNfcPendingIntent;
     }
 
     @Override
@@ -47,6 +35,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.payload = null;
+        this.framework = null;
+        this.wv = null;
+        this.wai = null;
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.nio.ByteBuffer;
  * Created by Noli on 30.05.2014.
  */
 public class Utils {
+
     public static String convertByteArrayToHexString(byte[] array) {
         StringBuilder hex = new StringBuilder(array.length * 2);
         for (byte b : array) {
