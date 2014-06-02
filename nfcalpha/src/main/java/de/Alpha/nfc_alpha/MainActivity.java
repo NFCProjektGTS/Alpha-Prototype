@@ -145,7 +145,6 @@ public class MainActivity extends Activity {
         if (payload != null) {
             framework.createWriteNdef(NdefCreator.vCard(payload));
             framework.enableWrite();
-            framework.installService();
         }
     }
 
