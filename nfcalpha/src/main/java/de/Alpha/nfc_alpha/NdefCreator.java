@@ -123,7 +123,7 @@ public class NdefCreator {
         return getEmptyNdef();
     }
 
-    public NdefRecord uriRecord(String uri) {
+    public static NdefRecord uriRecord(String uri) {
         try {
             final byte[] uriBytes = uri.getBytes("UTF-8");
             final byte[] recordBytes = new byte[uriBytes.length + 1];
@@ -134,6 +134,19 @@ public class NdefCreator {
             System.out.println("UTF-8 Unsopported!!!");
             return null;
         }
+    }
+
+    public static NdefMessage muteMessage() {
+        try {
+
+            NdefRecord record = new NdefRecord(
+                    NdefRecord.TNF_MIME_MEDIA, Operations.OPC_SILENT.getBytes(), new byte[0], new byte[0]);
+            NdefRecord[] records = new NdefRecord[]{record};
+            return new NdefMessage(records);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return getEmptyNdef();
     }
 
 

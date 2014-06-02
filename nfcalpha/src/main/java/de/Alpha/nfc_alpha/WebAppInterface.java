@@ -71,10 +71,8 @@ public class WebAppInterface {
     @JavascriptInterface
     public void writeStummschalten() {
         MainActivity.payload = Operations.OPC_SILENT;
-        if (MainActivity.payload != null) {
-            framework.createWriteNdef(NdefCreator.fromText(MainActivity.payload, "DE"));
+        framework.createWriteNdef(NdefCreator.muteMessage());
             framework.enableWrite();
-        }
         printDebugInfo("Schreibe Stummschalten");
     }
 

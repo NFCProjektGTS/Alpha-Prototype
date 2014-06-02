@@ -195,6 +195,8 @@ public class NFCFramework {
                 this.wai.printDebugInfo("Message: " + msg.toString());
                 this.wai.printDebugInfo("Record: " + rec.toString());
                 this.wai.printDebugInfo("Content: " + content);
+                System.out.println("Content= " + content);
+                System.out.println("");
             }
         }
         //wai.printDebugInfo(msgs.toString());
@@ -271,15 +273,30 @@ public class NFCFramework {
     }
 
     public void operate(NdefMessage[] msg) {
-        /*for (NdefMessage ms : msg) {
+        for (NdefMessage ms : msg) {
             for (NdefRecord rec : ms.getRecords()) {
-                byte[] payload = rec.getPayload();
-                String content = new String(payload);
-                this.wai.printDebugInfo("Message: " + msg.toString());
-                this.wai.printDebugInfo("Record: " + rec.toString());
-                this.wai.printDebugInfo("Content: " + content);
+                byte[] type = rec.getType();
+                String contenttype = new String(type);
+                // if statements in case no switch-case possible with Strings; usually impleneted in JDK7
+                if (contenttype == Operations.OPC_CONTACT) {
+                    //automatically handled in android os
+                }
+                if (contenttype == Operations.OPC_SILENT) {
+                    Utils.toggleSilent(caller);
+                    Toast.makeText(caller, "Mute Tag detected! Toggle Audiostate!", Toast.LENGTH_LONG).show();
+                }
+                /*switch (type){
+                    case Operations.OPC_CONTACT:
+                        break;
+                    case Operations.OPC_SILENT:
+                        break;
+                    default:
+                        wai.printDebugInfo("Could not resolve Tag-Operation");
+                        break;
+
+                }*/
             }
-        }*/
+        }
     }
 
     public void createWriteNdef(NdefMessage message) {
