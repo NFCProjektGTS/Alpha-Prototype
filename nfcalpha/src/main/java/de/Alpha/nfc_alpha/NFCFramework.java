@@ -32,7 +32,6 @@ public class NFCFramework {
     protected IntentFilter[] mTagFilters;
     protected NdefMessage[] mCurrentNdef;
     protected NdefMessage[] mWriteNdef;
-    protected OnTagWriteListener tagListener = null;
 
     NFCFramework(Activity caller, WebAppInterface wai) {
         this.caller = caller;
@@ -45,14 +44,6 @@ public class NFCFramework {
         this.mTagFilters = new IntentFilter[]{tagDetected};
 
 
-    }
-
-    public OnTagWriteListener getTagListener() {
-        return tagListener;
-    }
-
-    public void setTagListener(OnTagWriteListener tagListener) {
-        this.tagListener = tagListener;
     }
 
     public void installService() {
@@ -122,8 +113,7 @@ public class NFCFramework {
                 this.wai.printDebugInfo("Writing");
                 wTAG = (Tag) intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 if (wTAG != null && mWriteNdef[0] != null) {
-                    OnTagWriteListener writelisten = tagListener;
-                    writelisten.onTagWrite(writeTag(wTAG, mWriteNdef[0]));
+                    wai.printDebugInfo(OnTagWriteListener.onTagWrite(writeTag(wTAG, mWriteNdef[0])));
                 }
             }
         }
@@ -285,15 +275,5 @@ public class NFCFramework {
         this.mWriteNdef = temp;
     }
 
-
-    public interface OnTagWriteListener {
-        public static final int WRITE_OK = 0;
-        public static final int WRITE_ERROR_READ_ONLY = 1;
-        public static final int WRITE_ERROR_CAPACITY = 2;
-        public static final int WRITE_ERROR_BAD_FORMAT = 3;
-        public static final int WRITE_ERROR_IO_EXCEPTION = 4;
-
-        public void onTagWrite(int status);
-    }
 
 }
