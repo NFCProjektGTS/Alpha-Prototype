@@ -219,18 +219,18 @@ public class NFCFramework {
                 ndef.connect();
                 if (!ndef.isWritable()) {
                     wai.printDebugInfo("Tag is read-only.");
-		    disableWrite();
+                    disableWrite();
                     return OnTagWriteListener.WRITE_ERROR_READ_ONLY;
                 }
                 if (ndef.getMaxSize() < size) {
                     wai.printDebugInfo("Tag capacity is " + ndef.getMaxSize() + " bytes, message is " +
                             size + " bytes.");
-		    disableWrite(); 
+                    disableWrite();
                     return OnTagWriteListener.WRITE_ERROR_CAPACITY;
                 }
 
                 ndef.writeNdefMessage(message);
-		disableWrite();
+                disableWrite();
                 return OnTagWriteListener.WRITE_OK;
             } else {
                 NdefFormatable format = NdefFormatable.get(tag);
@@ -242,19 +242,19 @@ public class NFCFramework {
                         this.mWriteNdef = null;
                         return OnTagWriteListener.WRITE_OK;
                     } catch (IOException e) {
-                        disableWrite(); 
+                        disableWrite();
                         return OnTagWriteListener.WRITE_ERROR_IO_EXCEPTION;
                     }
                 } else {
-		    disableWrite(); 
+                    disableWrite();
                     return OnTagWriteListener.WRITE_ERROR_BAD_FORMAT;
                 }
             }
         } catch (Exception e) {
-	    disableWrite(); 
+            disableWrite();
             wai.printDebugInfo("Failed to write tag: " + e);
-        }	
-	disableWrite(); 
+        }
+        disableWrite();
         return OnTagWriteListener.WRITE_ERROR_IO_EXCEPTION;
     }
 
@@ -263,7 +263,6 @@ public class NFCFramework {
         if (enabled) {
             if (this.mWriteNdef != null) {
                 this.WriteMode = true;
-                installService();
                 Toast.makeText(caller, "Writemode enabled", Toast.LENGTH_LONG).show();
                 wai.printDebugInfo("Please scan a NFC Tag to write on");
             } else {
@@ -277,7 +276,6 @@ public class NFCFramework {
             this.wTAG = null;
             this.mWriteNdef = null;
             this.WriteMode = false;
-            uninstallService();
             Toast.makeText(caller, "Writemode disabled", Toast.LENGTH_LONG).show();
         }
     }

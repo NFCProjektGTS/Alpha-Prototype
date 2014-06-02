@@ -59,8 +59,7 @@ public class MainActivity extends Activity {
         super.onPause();
         if (framework != null) {
             if (framework.checkNFC()) {
-                framework.getmNfcAdapter().disableForegroundDispatch(this);
-
+                framework.uninstallService();
             }
         }
     }
@@ -144,8 +143,9 @@ public class MainActivity extends Activity {
             }
         }
         if (payload != null) {
-            framework.enableWrite();
             framework.createWriteNdef(NdefCreator.vCard(payload));
+            framework.enableWrite();
+            framework.installService();
         }
     }
 
