@@ -261,12 +261,13 @@ public class NFCFramework {
     public void enableWrite() {
         //allow write for next NFC intent
         if (enabled) {
-            if (this.wTAG != null && this.mWriteNdef != null) {
+            if (this.mWriteNdef != null) {
                 this.WriteMode = true;
                 installService();
                 Toast.makeText(caller, "Writemode enabled", Toast.LENGTH_LONG).show();
-            } else {
                 wai.printDebugInfo("Please scan a NFC Tag to write on");
+            } else {
+                wai.printDebugInfo("No Data specified!");
             }
         }
     }

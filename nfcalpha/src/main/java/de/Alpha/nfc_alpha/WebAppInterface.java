@@ -25,7 +25,6 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void showToast(String toast) {
-        MainActivity.framework.enableWrite();
     }
 
     @JavascriptInterface
@@ -80,6 +79,7 @@ public class WebAppInterface {
     public void writeKontakt() {
         mContext.startActivityForResult(new Intent(Intent.ACTION_GET_CONTENT).setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE), 1);
         if (payload != null) {
+            MainActivity.framework.enableWrite();
             MainActivity.framework.createWriteNdef(NdefCreator.vCard(payload));
         }
         printDebugInfo("Schreibe Kontakt");
