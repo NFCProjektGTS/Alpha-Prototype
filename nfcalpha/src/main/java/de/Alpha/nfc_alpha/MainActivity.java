@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
-import android.nfc.NdefMessage;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.webkit.WebSettings;
@@ -16,11 +15,9 @@ import java.io.FileInputStream;
 
 public class MainActivity extends Activity {
 
-
-    /// static in case used nearly everywhere
-    public static String payload;
+    /// static, in case is is used nearly everywhere
     public static NFCFramework framework;
-    static private WebView wv;
+    private static WebView wv;
     private WebAppInterface wai;
 
     public static WebView getWV() {
@@ -35,7 +32,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.payload = null;
+// set all null to handle rotate config
         this.framework = null;
         this.wv = null;
         this.wai = null;
@@ -85,8 +82,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        NdefMessage test = NdefCreator.vCard("TEST");
         wv = (WebView) findViewById(R.id.webview);
         wai = new WebAppInterface(this);
         wv.addJavascriptInterface(wai, "Android");
@@ -94,12 +89,6 @@ public class MainActivity extends Activity {
         webSettings.setJavaScriptEnabled(true);
         String url = "http://nfc.net16.net/";
         wv.loadUrl(url);
-
-        // WENN DIE SEITE FERTIG GELADEN IST WIRD JETZT DAS NFC FRAMEWORK AUFGEBAUT, NICHT HIER
-        //>> GIBT SONNST FEHLER BEI DEBUG AUSGABEN WENN DIE DAS INTERFACE SIE NICHT WEITER GEBEN KANN
-        //>>                       WebAppInterface.firstload()
-        //framework = new NFCFramework(this, wai);
-
     }
 
     @Override
@@ -111,22 +100,17 @@ public class MainActivity extends Activity {
 
                 Cursor cursor = managedQuery(contactData, null, null, null, null);
                 cursor.moveToFirst();
-                String lookupKey = cursor.getString(cursor
-                        .getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
-                Uri uri = Uri.withAppendedPath(
-                        ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
+                String lookupKey = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY));
+                Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_VCARD_URI, lookupKey);
                 AssetFileDescriptor fd;
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 try {
-                    fd = getContentResolver().openAssetFileDescriptor(uri,
-                            "r");
+                    fd = getContentResolver().openAssetFileDescriptor(uri, "r");
                     FileInputStream fis = fd.createInputStream();
                     byte[] buf = new byte[(int) fd.getDeclaredLength()];
                     fis.read(buf);
-                    payload = new String(buf);
+                    framework.setPayload(new String(buf));
                     Toast.makeText(this, "Contact: " + name + " selected to write on NFC-Tag!", Toast.LENGTH_LONG).show();
-                    //System.out.println(payload);
-
                 } catch (Exception e) {
                     Toast.makeText(this, "Failed to load Contact: " + name, Toast.LENGTH_LONG).show();
                     e.printStackTrace();
@@ -134,8 +118,8 @@ public class MainActivity extends Activity {
 
             }
         }
-        if (payload != null) {
-            framework.createWriteNdef(NdefCreator.vCard(payload));
+        if (!framework.getPayload().equals("")) {
+            framework.createWriteNdef(NdefCreator.vCard(framework.getPayload()));
             framework.enableWrite();
         }
     }

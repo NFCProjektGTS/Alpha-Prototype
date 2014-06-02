@@ -3,7 +3,6 @@ package de.Alpha.nfc_alpha;
 import android.app.Activity;
 import android.content.Intent;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
@@ -22,32 +21,6 @@ public class WebAppInterface {
         mContext = c;
     }
 
-    @JavascriptInterface
-    public void showToast(String toast) {
-    }
-
-    @JavascriptInterface
-    public void activateNFC() {
-        printDebugInfo("NFC Einstllungen geöffnet zum aktivieren");
-        final Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-        mContext.startActivity(intent);
-    }
-
-    @JavascriptInterface
-    public final void closeApp() {
-        printDebugWarning("App geschlossen, da kein NFC aktiviert wird.");
-        //wv.destroy();
-        showNotification("NFC nicht aktiviert", "Wenn NFC nicht aktiviert ist können Teile der App nicht genutzt werden.");
-
-        //TODO App schließen hier rein    geht nicht???-> new MainActivity().finish();
-    }
-
-    @JavascriptInterface
-    public void initNFC() {
-        //placeholder
-        System.out.println("Test1");
-    }
 
     //run("<JavascriptMethod()>;"); zum auführen einer Javascript Methode
 
@@ -70,7 +43,7 @@ public class WebAppInterface {
 
     @JavascriptInterface
     public void writeStummschalten() {
-        MainActivity.payload = Operations.OPC_SILENT;
+        framework.setPayload(Operations.OPC_SILENT);
         framework.createWriteNdef(NdefCreator.muteMessage());
             framework.enableWrite();
         printDebugInfo("Schreibe Stummschalten");
@@ -79,6 +52,7 @@ public class WebAppInterface {
     @JavascriptInterface
     public void writeKontakt() {
         mContext.startActivityForResult(new Intent(Intent.ACTION_GET_CONTENT).setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE), 1);
+        //protected void onActivityResult(int requestCode, int resultCode, Intent data)
         printDebugInfo("Schreibe Kontakt");
 
     }

@@ -26,12 +26,12 @@ public class NFCFramework {
     protected Activity caller;
     protected Tag wTAG;
     protected boolean WriteMode = false;
-    protected boolean used;
     protected WebAppInterface wai;
     protected boolean enabled = false;
     protected IntentFilter[] mTagFilters;
     protected NdefMessage[] mCurrentNdef;
     protected NdefMessage[] mWriteNdef;
+    private String payload = "";
 
     NFCFramework(Activity caller, WebAppInterface wai) {
         this.caller = caller;
@@ -46,6 +46,14 @@ public class NFCFramework {
         this.mTagFilters = new IntentFilter[]{tagDetected};
 
 
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
     public void installService() {
@@ -63,10 +71,6 @@ public class NFCFramework {
         if (enabled) {
             mNfcAdapter.disableForegroundDispatch(caller);
         }
-    }
-
-    public NfcAdapter getmNfcAdapter() {
-        return mNfcAdapter;
     }
 
 
@@ -279,6 +283,7 @@ public class NFCFramework {
                 String contenttype = new String(type);
 
                 // if statements in case no switch-case possible with Strings; usually impleneted in JDK7
+
                 if (contenttype.equals(Operations.OPC_CONTACT)) {
                     //automatically handled in android os
                 }else if (contenttype.equals(Operations.OPC_SILENT)) {
@@ -302,6 +307,10 @@ public class NFCFramework {
     public void createWriteNdef(NdefMessage message) {
         NdefMessage[] temp = {message};
         this.mWriteNdef = temp;
+    }
+
+    public void createWriteNdef(NdefMessage[] messages) {
+        this.mWriteNdef = messages;
     }
 
 

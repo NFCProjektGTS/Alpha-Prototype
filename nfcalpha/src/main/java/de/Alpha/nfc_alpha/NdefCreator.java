@@ -11,8 +11,7 @@ import java.nio.charset.Charset;
  * Created by Noli on 01.06.2014.
  */
 public class NdefCreator {
-    public static final byte[] RTD_ANDROID_APP = "android.com:pkg".getBytes(); /* https://github.com/Mobisocial/EasyNFC/blob/master/src/main/java/mobisocial/nfc/NdefFactory.java#L39 */
-
+    //public static final byte[] RTD_ANDROID_APP = "android.com:pkg".getBytes(); /* https://github.com/Mobisocial/EasyNFC/blob/master/src/main/java/mobisocial/nfc/NdefFactory.java#L39 */
     private static final String[] URI_PREFIXES = new String[]{
             "",
             "http://www.",
@@ -77,7 +76,7 @@ public class NdefCreator {
         } catch (NoClassDefFoundError e) {
             return null;
         } catch (UnsupportedEncodingException e) {
-            // no UTF-8? really?
+            System.out.println("UTF-8 Unsopported!!!");
             return null;
         }
     }
@@ -100,11 +99,10 @@ public class NdefCreator {
     }
 
     public static final NdefMessage getEmptyNdef() {
-        byte[] empty = new byte[]{};
+        byte[] empty = new byte[0];
         NdefRecord[] records = new NdefRecord[1];
         records[0] = new NdefRecord(NdefRecord.TNF_WELL_KNOWN, empty, empty, empty);
-        NdefMessage ndef = new NdefMessage(records);
-        return ndef;
+        return new NdefMessage(records);
     }
 
     public static NdefMessage vCard(String vcard) {
@@ -132,8 +130,8 @@ public class NdefCreator {
             return new NdefRecord(NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_URI, new byte[0], recordBytes);
         } catch (UnsupportedEncodingException e) {
             System.out.println("UTF-8 Unsopported!!!");
-            return null;
         }
+        return null;
     }
 
     public static NdefMessage muteMessage() {
