@@ -143,6 +143,10 @@ public class MainActivity extends Activity {
 
             }
         }
+        if (payload != null) {
+            framework.enableWrite();
+            framework.createWriteNdef(NdefCreator.vCard(payload));
+        }
     }
 
     @Override
