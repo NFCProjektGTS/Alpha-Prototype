@@ -40,6 +40,10 @@ public class WebAppInterface {
         //new NFCFramework(mContext,this);
     }
 
+    public void activeNFC() {
+        framework.setEnabled(framework.checkNFC());
+    }
+
 
     @JavascriptInterface
     public void writeStummschalten() {
@@ -54,7 +58,6 @@ public class WebAppInterface {
         mContext.startActivityForResult(new Intent(Intent.ACTION_GET_CONTENT).setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE), 1);
         //protected void onActivityResult(int requestCode, int resultCode, Intent data)
         printDebugInfo("Schreibe Kontakt");
-
     }
 
 

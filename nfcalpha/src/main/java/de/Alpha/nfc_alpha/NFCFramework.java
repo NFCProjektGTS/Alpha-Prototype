@@ -48,6 +48,14 @@ public class NFCFramework {
 
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public String getPayload() {
         return payload;
     }
