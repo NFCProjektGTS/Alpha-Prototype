@@ -108,6 +108,7 @@ public class NFCFramework {
 
                 }
                 mCurrentNdef = msgs;
+                operate(mCurrentNdef);
                 printTag(mCurrentNdef);
             } else {
                 this.wai.printDebugInfo("Writing");
@@ -191,11 +192,11 @@ public class NFCFramework {
             for (NdefRecord rec : msg.getRecords()) {
                 byte[] payload = rec.getPayload();
                 String content = new String(payload);
-                this.wai.printDebugInfo("Message: " + msg.toString() + " Record: " + rec.toString() + content);
+                this.wai.printDebugInfo("Message: " + msg.toString());
+                this.wai.printDebugInfo("Record: " + rec.toString());
+                this.wai.printDebugInfo("Content: " + content);
             }
         }
-
-
         //wai.printDebugInfo(msgs.toString());
         //System.out.println(msgs);
     }
@@ -267,6 +268,18 @@ public class NFCFramework {
             this.WriteMode = false;
             Toast.makeText(caller, "Writemode disabled", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void operate(NdefMessage[] msg) {
+        /*for (NdefMessage ms : msg) {
+            for (NdefRecord rec : ms.getRecords()) {
+                byte[] payload = rec.getPayload();
+                String content = new String(payload);
+                this.wai.printDebugInfo("Message: " + msg.toString());
+                this.wai.printDebugInfo("Record: " + rec.toString());
+                this.wai.printDebugInfo("Content: " + content);
+            }
+        }*/
     }
 
     public void createWriteNdef(NdefMessage message) {
